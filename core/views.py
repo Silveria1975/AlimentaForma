@@ -1,3 +1,54 @@
-from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.forms import forms
+from django.shortcuts import render, redirect
 
-# Create your views here.
+from models import Profile
+
+
+@login_required
+def home(request):
+    """
+    Vista para la página de inicio.
+    """
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    context = {
+        'user': user,
+        'profile': profile,
+    }
+    return render(request, 'core/home.html', context)
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['field1', 'field2', ...]  # Indicar los campos del perfil a editar
+
+
+@login_required
+def profile_edit(request, context=None):
+    """
+    Vista para editar el perfil de usuario.
+    """
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            try:
+                form.save()
+                return redirect('home')
+            except Exception as e:
+                # Mostrar un mensaje de error al usuario
+                context['error'] = str(e)
+    else:
+        form = ProfileForm(instance=profile)
+
+    context = {
+        'user': user,
+        'profile': profile,
+        'form': form,
+    }
+    return render(request, 'core/profile_edit.html', context)
