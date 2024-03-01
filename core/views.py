@@ -17,6 +17,22 @@ class CoursesView (TemplateView):
 class AnnouncementsView (TemplateView):
     template_name = 'announcements.html'
 
+# Vista de Inicio de sesión
+class LoginView (TemplateView):
+    template_name = './register/login.html'
+    
+class RegisterView (TemplateView):
+    template_name = './register/register.html'
+
+
+
+
+
+
+
+
+
+
 # @login_required
 # def home(request):
    

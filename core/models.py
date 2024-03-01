@@ -146,4 +146,8 @@ class Suscription(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='attendances',
                                 limit_choices_to={'groups__name': 'estudiantes'}, verbose_name='Estudiante')
     date = models.DateField(null=True, blank=True, verbose_name='Fecha')
-    payment = models.BooleanField(default=False, blank=True, null=True, verbose_name='Presente')
+    payment = models.BooleanField(default=False, blank=True, null=True, verbose_name='Pago')
+    
+    class Meta:
+        verbose_name = 'suscripción'
+        verbose_name_plural = 'suscripciones'

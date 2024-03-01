@@ -1,11 +1,10 @@
-# from django.apps import AppConfig
-# from django.contrib.auth import models as auth_models
+from django.apps import AppConfig
 
+class CoreConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'core'
+    verbose_name = 'Alimenta Forma'
 
-# class CoreConfig(AppConfig):
-#     name = 'core'
-
-#     def ready(self):
-#         # Registrar el modelo `Profile` con el administrador de usuarios
-#         auth_models.User.meta.get_field('profile').related_model = 'core.Profile'
+    def ready(self):
+        import core.signals
 
