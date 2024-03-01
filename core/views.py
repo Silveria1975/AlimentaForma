@@ -2,12 +2,20 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 from django.forms import forms
 from django.shortcuts import render, redirect
-
 #from .models import Profile
+
 
 #Vista para la página de inicio.
 class HomeView (TemplateView):
     template_name = 'home.html'
+
+# Vista pagina de cursos
+class CoursesView (TemplateView):
+    template_name = 'courses.html'
+
+# Vista pagina de anuncios
+class AnnouncementsView (TemplateView):
+    template_name = 'announcements.html'
 
 # @login_required
 # def home(request):
