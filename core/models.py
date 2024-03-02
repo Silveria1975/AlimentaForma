@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.db import models
 
-
 class User(AbstractUser):
     class Meta:
         verbose_name = 'usuario'
@@ -45,15 +44,12 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
-
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
-
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
@@ -80,7 +76,6 @@ class Course(models.Model):
         verbose_name = 'curso'
         verbose_name_plural = 'cursos'
 
-
 class Announcement(models.Model):
     STATUS_CHOICES = (
         ('v', 'vigente'),
@@ -96,8 +91,7 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.name
-
-
+    
 class Registration(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Curso')
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students_registration',
@@ -110,7 +104,6 @@ class Registration(models.Model):
     class Meta:
         verbose_name = 'Inscripcion'
         verbose_name_plural = 'Inscripciones'
-
 
 class Mark(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Curso')
@@ -140,7 +133,6 @@ class Mark(models.Model):
     class Meta:
         verbose_name = 'Nota'
         verbose_name_plural = 'Notas'
-
 
 class Suscription(models.Model):
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='attendances',

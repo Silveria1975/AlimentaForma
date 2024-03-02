@@ -1,4 +1,5 @@
 apturl==0.5.2
+asgiref==3.7.2
 astroid==2.9.3
 asttokens==2.0.5
 bcrypt==3.2.0
@@ -20,6 +21,8 @@ deprecation==2.1.0
 distlib==0.3.7
 distro==1.7.0
 distro-info==1.1+ubuntu0.2
+Django==5.0.2
+django-crispy-forms==2.1
 docutils==0.17.1
 duplicity==0.8.21
 fasteners==0.14.1
@@ -107,6 +110,7 @@ SecretStorage==3.3.1
 Send2Trash==1.8.1b0
 six==1.16.0
 soupsieve==2.3.1
+sqlparse==0.4.4
 systemd-python==234
 tesserocr==2.6.2
 thonny==3.3.14
@@ -217,7 +221,7 @@ types-vobject==0.9
 types-waitress==0.1
 types-Werkzeug==1.0
 types-xxhash==2.0
-typing-extensions==3.10.0.2
+typing_extensions==4.10.0
 ubuntu-advantage-tools==8001
 ubuntu-drivers-common==0.0.0
 ufw==0.36.1
