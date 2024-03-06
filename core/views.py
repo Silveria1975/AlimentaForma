@@ -1,51 +1,41 @@
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.views import View
 from django.forms import forms
 from django.shortcuts import render, redirect
+from .forms import RegisterForm
 #from .models import Profile
-
-def plural_to_singular (plural):
-    plural_singular = {
-        'estudiantes': 'estudiante',
-        'profesores': 'profesor',
-        'preceptores': 'preceptor',
-        'administrativos': 'administrativo',
-    }
-    return plural_singular.get(plural, 'error')
 
 # Obtener color y grupo de usuario
 def get_group_and_color (user):
     group = user.groups.first()
     group_id = None
     group_name = None
-    group_name_singular = None
     color = None        
     if group:
-        if group.name == 'estudiantes':
+        if group.name == 'estudiante':
             color = 'bg-primary'
-        elif group.name == 'profesores':
+        elif group.name == 'profesor':
             color = 'bg-success'
-        elif group.name == 'preceptores':
+        elif group.name == 'empresa':
             color = 'bg-secondary'
-        elif group.name == 'administrativos':
+        elif group.name == 'administrativo':
             color = 'bg-danger'
         
         group_id = group.id        
         group_name = group.name
-        group_name_singular = plural_to_singular(group.name) 
         
-    return group_id, group_name, group_name_singular, color
+    return group_id, group_name, color
 
 def add_group_name_to_context (view_class):
     original_dispatch = view_class.dispatch
     
     def dispatch (self, request, *args, **kwargs):
         user = self.request.user
-        group_id, group_name, group_name_singular, color = get_group_and_color(user)
+        group_id, group_name, color = get_group_and_color(user)
         
         context = {
             'group_name': group_name,
-            'group_name_singular': group_name_singular,
             'color': color,
         }    
         
@@ -54,7 +44,6 @@ def add_group_name_to_context (view_class):
     
     view_class.dispatch = dispatch
     return view_class
-
 
 #Vista para la página de inicio.
 class HomeView (TemplateView):
@@ -72,9 +61,27 @@ class AnnouncementsView (TemplateView):
 class LoginView (TemplateView):
     template_name = './register/login.html'
     
-class RegisterView (TemplateView):
-    template_name = './register/register.html'
+class RegisterView (View):
+    def get (self, request):
+        data = {
+            'form': RegisterForm()
+        }
+        return render (request, 'register/register.html', data)
 
+    def post (self, request):
+        user_creation_form = RegisterForm(data = request.POST)
+        if user_creation_form.is_valid():
+            user_creation_form.save()
+            user = authenticate( username = user_creation_form.cleaned_data['username'],
+                                password = user_creation_form.cleaned_data['password1'])
+            login (request, user)
+            user.profile.created_by_admin = False
+            user.profile.save()
+            return redirect ('home')
+        data = {
+            'form': user_creation_form
+        }
+        return render(request, 'register/register.html', data)
 
 
 

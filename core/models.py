@@ -21,7 +21,6 @@ class User(AbstractUser):
         verbose_name='Permisos'
     )
 
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', verbose_name='Usuario')
     image = models.ImageField(default='defaultuser.png', upload_to='users/',
@@ -30,7 +29,7 @@ class Profile(models.Model):
     location = models.CharField(max_length=150, null=True, blank=True, verbose_name='Localidad')
     telephone = models.CharField(max_length=50, null=True, blank=True, verbose_name='Teléfono')
     created_by_admin = models.BooleanField(default=True, blank=True, verbose_name='Creado por Admin')
-    age = models.IntegerField(blank=True, verbose_name='Edad')
+    age = models.IntegerField(blank=True, null=True, verbose_name='Edad')
     city = models.CharField(max_length=50, blank=True, verbose_name='Localidad')
     preferred_language = models.CharField(max_length=50,
                                           blank=True)  # Ver si puede elegir cualquier idioma o está limitado,
@@ -53,7 +52,6 @@ def save_user_profile(sender, instance, **kwargs):
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)
-
 
 class Course(models.Model):
     STATUS_CHOICES = (
@@ -95,7 +93,7 @@ class Announcement(models.Model):
 class Registration(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Curso')
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='students_registration',
-                                limit_choices_to={'groups__name': 'estudiantes'}, verbose_name='Estudiante')
+                                limit_choices_to={'groups__name': 'estudiante'}, verbose_name='Estudiante')
     enabled = models.BooleanField(default=True, verbose_name='Alumno Regular')
 
     def __str__(self):
@@ -107,7 +105,7 @@ class Registration(models.Model):
 
 class Mark(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Curso')
-    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': 'estudiantes'},
+    student = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'groups__name': 'estudiante'},
                                 verbose_name='Estudiante')
     mark_1 = models.PositiveIntegerField(null=True, blank=True, verbose_name='Nota 1')
     mark_2 = models.PositiveIntegerField(null=True, blank=True, verbose_name='Nota 2')
@@ -135,8 +133,8 @@ class Mark(models.Model):
         verbose_name_plural = 'Notas'
 
 class Suscription(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='attendances',
-                                limit_choices_to={'groups__name': 'estudiantes'}, verbose_name='Estudiante')
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='suscription',
+                                limit_choices_to={'groups__name': 'estudiante'}, verbose_name='Estudiante')
     date = models.DateField(null=True, blank=True, verbose_name='Fecha')
     payment = models.BooleanField(default=False, blank=True, null=True, verbose_name='Pago')
     

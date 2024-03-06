@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.urls import path
 from .views import HomeView, CoursesView, AnnouncementsView, LoginView, RegisterView
 
-
 urlpatterns = [
     # Pagina de inicio
     path('', HomeView.as_view(), name = 'home'),

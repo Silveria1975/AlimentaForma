@@ -3,6 +3,8 @@ from django.db.models.signals import post_save, post_migrate
 from django.dispatch import receiver
 from .models import Profile, Registration
 
+
+
 # Crea grupos por defecto luego de hacer las migraciones, si no existen
 def create_default_groups():
     Group.objects.get_or_create(name='estudiante')
