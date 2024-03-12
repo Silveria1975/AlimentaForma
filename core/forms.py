@@ -7,7 +7,13 @@ from crispy_forms.layout import Layout, Field, Submit
 
 # Formulario de logueo (modelo de Django)
 class LoginForm (AuthenticationForm):
-    pass
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+        labels = {
+            'username': 'user',
+            'password': 'password'
+        }
 
 # Formularios de autenticación y creación de usuarios (predefinidos en Django)
 class UserAuthenticationForm(AuthenticationForm):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import HomeView, CoursesView, AnnouncementsView, LoginView, RegisterView
+from .views import HomeView, CoursesView, AnnouncementsView, CustomLoginView, RegisterView
 
 urlpatterns = [
     # Pagina de inicio
@@ -10,7 +10,7 @@ urlpatterns = [
     # Pagina de anuncios
     path('announcements/', AnnouncementsView.as_view(), name = 'announcements'),
     # Inicio de Sesión
-    path('login/', LoginView.as_view(), name = 'login'),
+    path('login/', CustomLoginView.as_view(), name = 'login'),
     # Registro de nuevo usuario
     path('register/', RegisterView.as_view(), name= 'register'),
 ]
