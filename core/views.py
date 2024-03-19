@@ -5,8 +5,9 @@ from django.views.generic import TemplateView
 from django.views import View
 from django.forms import forms
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm
 #from .models import Profile
 
 # Obtener color y grupo de usuario
@@ -59,17 +60,13 @@ class CoursesView (TemplateView):
 # Vista pagina de anuncios
 class AnnouncementsView (TemplateView):
     template_name = 'announcements.html'
-
-# Vista de Inicio de sesión
-class LoginView (TemplateView):
-    template_name = './register/login.html'
-    
+   
 class RegisterView (View):
     def get (self, request):
         data = {
             'form': RegisterForm()
         }
-        return render (request, 'register/register.html', data)
+        return render (request, 'registration/register.html', data)
 
     def post (self, request):
         user_creation_form = RegisterForm(data = request.POST)
@@ -84,71 +81,18 @@ class RegisterView (View):
         data = {
             'form': user_creation_form
         }
-        return render(request, 'register/register.html', data)
+        return render(request, 'registration/register.html', data)
 
-# Login personalizado
-@add_group_name_to_context
-class CustomLoginView (LoginView):
-    def get (self, request):
-        data = {
-            'form': LoginForm()
-        }
-        return render (request, 'register/login.html', data)
-    
-    form_class = LoginForm
-    template_name = './register/login.html'
-    
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        
-        #Acceder al perfil del usuario
-        profile = self.request.user.profile
-        
-        #Verificar el valor del campo created_by_admin
-        if profile.created_by_admin:
-            messages.info(self.request, 'Bienvenido, cambie su contraseña.')
-            response ['Location'] = reverse_lazy('profile_password_change')
-            response.status_code = 302
-            
-        return response
-    
-    def get_success_url (self):
-        return super().get_success_url()
+# Inicio de Sesión
+class LoginView (LoginView):
+    template_name = './registration/login.html'
 
-# CAMBIAR LA CONTRASEÑA DEL USUARIO
-@add_group_name_to_context
-class ProfilePasswordChangeView(PasswordChangeView):
-    template_name = 'profile/change_password.html'
-    success_url = reverse_lazy('profile')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['password_changed'] = self.request.session.get('password_changed', False)
-        return context
-
-    def form_valid(self, form):
-        # Actualizar el campo created_by_admin del modelo Profile
-        profile = Profile.objects.get(user=self.request.user)
-        profile.created_by_admin = False
-        profile.save()
-
-        messages.success(self.request, 'Cambio de contraseña exitoso')
-        update_session_auth_hash(self.request, form.user)
-        self.request.session['password_changed'] = True
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(
-            self.request,
-            'Hubo un error al momento de intentar cambiar la contraseña: {}.'.format(
-                form.errors.as_text()
-            )
-        )
-        return super().form_invalid(form)
-
-
-
-
+# Cierre de sesión 
+def logoutView (request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
+    return render (request, './registration/logout.html', {})
 
 # @login_required
 # def home(request):

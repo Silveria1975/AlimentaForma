@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
-from .views import HomeView, CoursesView, AnnouncementsView, CustomLoginView, RegisterView
+from .views import HomeView, CoursesView, AnnouncementsView,  RegisterView, LoginView, logoutView, PasswordChangeView
+from django.contrib.auth.views import logout_then_login
 
 urlpatterns = [
     # Pagina de inicio
@@ -10,7 +11,11 @@ urlpatterns = [
     # Pagina de anuncios
     path('announcements/', AnnouncementsView.as_view(), name = 'announcements'),
     # Inicio de Sesión
-    path('login/', CustomLoginView.as_view(), name = 'login'),
+    path('login/', LoginView.as_view(), name = 'login'),
+    # Cierre de Sesión
+    path('logout/', logoutView, name = 'logout'),
     # Registro de nuevo usuario
     path('register/', RegisterView.as_view(), name= 'register'),
+    # Cambiar contraseña
+    path('password_change/', PasswordChangeView.as_view(), name= 'password_change') # Falta probar la vista!
 ]

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-3">
+    
+    <h2>CIERRE DE SESION</h2>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+
+        <div class="card mx-auto" style="width: 30rem;">
+            <h5 class="card-title">Está seguro que desea cerrar la sesión</h5>
+            <button class="btn btn-sm btn-primary float-end" type="submit" href="{% url 'logout' %}">Cerrar sesión</button>    
+        </div>
+    </form>
+
+    <a class="card-link" href="{% url 'home' %}">Inicio</a>
+
+</div>
+
+{% endblock %}
