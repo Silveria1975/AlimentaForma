@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from .views import HomeView, CoursesView, AnnouncementsView,  RegisterView, LoginView, logoutView, PasswordChangeView
+from .views import HomeView, CoursesView, AnnouncementsView,  RegisterView, LoginView, logoutView, PasswordChangeView, ProfileView
 from django.contrib.auth.views import logout_then_login
 
 urlpatterns = [
@@ -15,7 +15,9 @@ urlpatterns = [
     # Cierre de Sesión
     path('logout/', logoutView, name = 'logout'),
     # Registro de nuevo usuario
-    path('register/', RegisterView.as_view(), name= 'register'),
+    path('register/', RegisterView.as_view(), name = 'register'),
     # Cambiar contraseña
-    path('password_change/', PasswordChangeView.as_view(), name= 'password_change') # Falta probar la vista!
+    path('password_change/', PasswordChangeView.as_view(), name = 'password_change'), # Falta el enlace
+    # Perfil de usuario
+    path('profile/', ProfileView.as_view(), name = 'profile')
 ]

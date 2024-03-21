@@ -60,7 +60,8 @@ class CoursesView (TemplateView):
 # Vista pagina de anuncios
 class AnnouncementsView (TemplateView):
     template_name = 'announcements.html'
-   
+  
+# Vista para registro de usuarios 
 class RegisterView (View):
     def get (self, request):
         data = {
@@ -94,26 +95,38 @@ def logoutView (request):
         return redirect('home')
     return render (request, './registration/logout.html', {})
 
-# @login_required
-# def home(request):
-   
+# Vista para cambiar contraseña
+@add_group_name_to_context
+class PasswordChangeView (PasswordChangeView): 
+    template_name = 'profile/change_password.html'
+    success_url = reverse_lazy('profile')
     
+    #método para proporcionar datos adicionales al contexto de la plantilla antes de que esta se renderice.
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['password_change'] = self.request.session.get('password_change', False)
+        return context   
+
+    def form_valid (self, form):
+        profile = Profile.objects.get(user=self.request.user)
+        profile.created_by_admin = False
+        profile.save()
+        
+        message.success(self.request, 'Cambio de contraseña exitoso')
+        update_session_auth_hash(self.request, form.user)
+        self.request.session['password_change'] = True
+        return super().form_valid(form)
     
-#     user = request.user
-#     profile = Profile.objects.get(user=user)
-
-#     context = {
-#         'user': user,
-#         'profile': profile,
-#     }
-#     return render(request, 'core/home.html', context)
-
-
-# class ProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = ['field1', 'field2', ...]  # Indicar los campos del perfil a editar
-
+    def form_invalid(self, form):
+        message.error(
+            self.request, 
+            'Se produjo un error al intentar cambiar la contraseña: {}.'.format(form.errors.as_text())
+        )
+        return super().form_invalid(form)
+        
+@add_group_name_to_context
+class ProfileView (TemplateView):
+    template_name = './profile/profile.html'
 
 # @login_required
 # def profile_edit(request, context=None):

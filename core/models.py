@@ -23,16 +23,14 @@ class User(AbstractUser):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', verbose_name='Usuario')
-    image = models.ImageField(default='defaultuser.png', upload_to='users/',
-                              verbose_name='imagen de perfil')  # OJO!!! redefinir default y upload_to
+    image = models.ImageField(default='defaul-user.svg', upload_to='user/', verbose_name='imagen de perfil')
     address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
     location = models.CharField(max_length=150, null=True, blank=True, verbose_name='Localidad')
     telephone = models.CharField(max_length=50, null=True, blank=True, verbose_name='Teléfono')
     created_by_admin = models.BooleanField(default=True, blank=True, verbose_name='Creado por Admin')
     age = models.IntegerField(blank=True, null=True, verbose_name='Edad')
     city = models.CharField(max_length=50, blank=True, verbose_name='Localidad')
-    preferred_language = models.CharField(max_length=50,
-                                          blank=True)  # Ver si puede elegir cualquier idioma o está limitado,
+    preferred_language = models.CharField(max_length=50, blank=True)  # Ver si puede elegir cualquier idioma o está limitado,
     # es necesario?
 
     class Meta:

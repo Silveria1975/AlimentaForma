@@ -39,20 +39,20 @@ class UserAuthenticationForm(AuthenticationForm):
 #             'password2': 'Confirmar contraseña',
 #         }
 
-# Formularios para modelos personalizados
-# class ProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = ('image', 'address', 'location', 'telephone', 'age', 'city', 'preferred_language')
-#         labels = {
-#             'image': 'Imagen de perfil',
-#             'address': 'Dirección',
-#             'location': 'Localidad',
-#             'telephone': 'Teléfono',
-#             'age': 'Edad',
-#             'city': 'Ciudad',
-#             'preferred_language': 'Idioma preferido',
-#         }
+#Formularios para modelos personalizados
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('image', 'address', 'location', 'telephone', 'age', 'preferred_language')
+        labels = {
+            'image': 'Imagen de perfil',
+            'address': 'Dirección',
+            'location': 'Localidad',
+            'telephone': 'Teléfono',
+            'age': 'Edad',
+            'city': 'Ciudad',
+            'preferred_language': 'Idioma preferido',
+        }
 
 # Formulario para Cursos
 # class CourseForm(forms.ModelForm):
